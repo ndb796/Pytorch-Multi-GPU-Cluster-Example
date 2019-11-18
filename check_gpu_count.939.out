@@ -1,0 +1,22 @@
+SLURM_SUBMIT_DIR=/home/dongbinna/Pytorch-Multi-GPU-Cluster-Example
+CUDA_HOME=/opt/ohpc/pub/apps/cuda-10.0
+CUDA_VISIBLE_DEVICES=0,1,2,3
+CUDA_VERSION=10.0
+2: n13
+0: n13
+1: n13
+3: n13
+3: /home/dongbinna/Pytorch-Multi-GPU-Cluster-Example
+2: /home/dongbinna/Pytorch-Multi-GPU-Cluster-Example
+1: /home/dongbinna/Pytorch-Multi-GPU-Cluster-Example
+0: /home/dongbinna/Pytorch-Multi-GPU-Cluster-Example
+3: Tue Nov 19 03:33:08 KST 2019
+0: Tue Nov 19 03:33:08 KST 2019
+2: Tue Nov 19 03:33:08 KST 2019
+1: Tue Nov 19 03:33:08 KST 2019
+[ Python Program Start ]
+4
+Tue Nov 19 03:33:13 KST 2019
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+               939 gpu-titan check_gp dongbinn  R       0:06      1 n13
+##### END #####
