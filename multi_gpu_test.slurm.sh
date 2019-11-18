@@ -8,6 +8,7 @@
 #SBATCH --gres=gpu:4
 #SBATCH --nodes=1
 #SBATCH --nodelist=n7
+#SBATCH --ntasks=4
 #SBATCH --tasks-per-node=4
 #SBATCH --cpus-per-task=1
 
