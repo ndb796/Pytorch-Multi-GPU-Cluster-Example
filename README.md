@@ -42,3 +42,5 @@ nvidia-smi
 * Multi GPU 연산의 속도가 오히려 더 느린 경우, Batch Size를 조절합니다.(Batch Size가 커지면 오히려 빨라집니다.)
 * 그렇다고 해서 Batch Size를 너무 크게 만들면, 기존 논문들에 따르면 오히려 (일반화) 성능이 떨어질 수 있습니다.
 * 물론 애초에 Batch Size를 크게 하려면 Multi GPU가 필요합니다.
+* 데이터셋 자체가 작은 경우 (MNIST 등), Multi GPU가 비효율적으로 동작할 수 있습니다. (CIFAR-10의 경우 정상 동작)
+* Multi GPU 모드로 설정해도, 하나의 GPU만 사용되는 경우에는 코드 내부의 오류 찾기 (환경변수 등)
