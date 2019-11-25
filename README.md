@@ -45,3 +45,36 @@ nvidia-smi
 * 데이터셋 자체가 작은 경우 (MNIST 등), Multi GPU가 비효율적으로 동작할 수 있습니다. (CIFAR-10의 경우 정상 동작)
 * Multi GPU 모드로 설정해도, 하나의 GPU만 사용되는 경우에는 코드 내부의 오류를 찾아야 합니다. (환경변수 등)
 * Multi GPU로  동작하는 [코드](https://github.com/facebookresearch/mixup-cifar10)를 참고합니다.
+
+#### Anoconda Download & Installation
+
+* 아나콘다를 다운로드하고, 설치합니다.
+<pre>
+wget https://repo.anaconda.com/archive/Anaconda3-2019.10-Linux-x86_64.sh
+sh Anaconda3-2019.10-Linux-x86_64.sh
+</pre>
+
+* Deactivate 이후에 가상 환경 리스트 확인하기
+<pre>
+conda deactivate
+conda env list 
+</pre>
+
+* TensorFlow 전용 가상 환경 구축하기 및 Activate
+<pre>
+conda create -n tf-cpu-py37 python=3.7
+conda activate tf-cpu-py37
+</pre>
+
+* 필요한 라이브러리 설치하기
+<pre>
+pip install tensorflow-gpu --user
+</pre>
+
+* 클러스터에서 가상 환경 이용 및 필요한 모듈만 Load
+<pre>
+ml purge
+conda activate tf-cpu-py37
+ml load cuda/10.0
+ml load cuDNN/cuda/10.0/7.6.4.38
+</pre>
