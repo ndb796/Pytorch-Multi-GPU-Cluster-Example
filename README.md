@@ -67,6 +67,14 @@ conda create -n tf-cpu-py37 python=3.7
 conda activate tf-cpu-py37
 </pre>
 
+* 클러스터에서 가상 환경 이용 및 필요한 모듈만 Load
+<pre>
+ml purge
+conda activate tf-cpu-py37
+ml load cuda/10.0
+ml load cuDNN/cuda/10.0/7.6.4.38
+</pre>
+
 * 필요한 라이브러리를 자기자신의 사용자 환경에 설치하기
 <pre>
 pip install tensorflow-gpu --user
@@ -75,14 +83,6 @@ pip install image --user
 pip install pillow --user
 pip install opencv-python --user
 pip install dlib --user
-</pre>
-
-* 클러스터에서 가상 환경 이용 및 필요한 모듈만 Load
-<pre>
-ml purge
-conda activate tf-cpu-py37
-ml load cuda/10.0
-ml load cuDNN/cuda/10.0/7.6.4.38
 </pre>
 
 #### 실제 실험 과정
@@ -113,7 +113,10 @@ CC=gcc make -j$(nproc)
 </pre>
 
 * 이후에 특정 세션에서 env | grep LD_LIBRARY_PATH 명령으로 기존의 LD_LIBRARY_PATH 환경변수 확인한 뒤에 내용 복사
-* 기존의 환경변수 내용에 :를 붙인 뒤에 /home/dongbinna/additional_library/OpenBLAS 추가 (OpenBLAS 절대 경로)
+* 기존의 해당 환경변수 내용에 :를 붙인 뒤에 /home/dongbinna/additional_library/OpenBLAS 추가 (OpenBLAS 절대 경로)
+* 마지막으로 export LD_LIBRARY_PATH='변경된 내용' 으로 환경변수 업데이트 해주기
+* 이렇게 해주어도 Illegal instruction (core dumped)와 같은 오류가 발생할 수 있음
+  * 저자는 이러한 오류가 발생했었으나, 프로그램이 있는 폴더에서 환경변수 작업 이후에 바로 실행하니 오류가 나오지 않았음
 
 #### 특정 노드에서 무한 반복 스크립트만 실행하는 방법
 
@@ -159,13 +162,15 @@ echo  "##### END #####"
 
 * sbatch bash_batch.sh 명령으로 실행
 * 이제 해당 Job이 무한히 돌고 있을 때, ssh 명령으로 해당 노드에 접근하여 사용하는 것이 가능하긴 함
+* 솔직히 이 방법이 제일 편하더라도, 공용 클러스터 환경이라면 사용하면 문제가 될 수 있음
 
 #### 기타
 
 * 특정 노드에 ssh 명령으로 접속한 뒤에도, pip 명령으로 필요한 패키지를 설치해 바로 쓸 수 있음
 * 특정 노드에 Ssh 명령으로 접속하는 경우, GPU 자원이 자신의 것만으로 제한되지 않음
-  * 그래서 파이썬 프로그램이 다른 사용자의 GPU에 접근하는 경우 오류가 발생함
-  * 따라서 다음과 같이 특정한 GPU 자원만 이용하도록 코드상에서 제한하여 오류 해결 가능
+  * 그래서 파이썬 프로그램이 다른 사용자의 GPU에 접근하는 경우도 생길 수 있음 (오류는 발생하지 않음)
+  * 따라서 다음과 같이 특정한 GPU 자원만 이용하도록 코드상에서 제한해 줄 수 있음
 <pre>
 os.environ["CUDA_VISIBLE_DEVICES"]='0,1'
 </pre>
+* 별도의 Limit이 걸려있지 않다면, ssh로 접속한 뒤에 학습(Training) 코드를 실행해도 튕기지 않음
