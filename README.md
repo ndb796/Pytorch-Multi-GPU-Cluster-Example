@@ -67,7 +67,7 @@ conda create -n tf-cpu-py37 python=3.7
 conda activate tf-cpu-py37
 </pre>
 
-* 필요한 라이브러리 설치하기 (특정 Conda Environment에 접속해 있어야 합니다.)
+* 필요한 라이브러리를 자기자신의 사용자 환경에 설치하기
 <pre>
 pip install tensorflow-gpu --user
 pip install matplotlib --user
@@ -164,6 +164,8 @@ echo  "##### END #####"
 
 * 특정 노드에 ssh 명령으로 접속한 뒤에도, pip 명령으로 필요한 패키지를 설치해 바로 쓸 수 있음
 * 특정 노드에 Ssh 명령으로 접속하는 경우, GPU 자원이 자신의 것만으로 제한되지 않음
-  * 따라서 파이썬 프로그램이 다른 사용자의 GPU에 접근하는 경우 오류가 발생함
-  * 다음과 같이 특정한 GPU 자원만 이용하도록 코드상에서 제한하여 오류 해결 가능
-
+  * 그래서 파이썬 프로그램이 다른 사용자의 GPU에 접근하는 경우 오류가 발생함
+  * 따라서 다음과 같이 특정한 GPU 자원만 이용하도록 코드상에서 제한하여 오류 해결 가능
+<pre>
+os.environ["CUDA_VISIBLE_DEVICES"]='0,1'
+</pre>
