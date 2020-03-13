@@ -175,3 +175,14 @@ echo  "##### END #####"
 os.environ["CUDA_VISIBLE_DEVICES"]='0,1'
 </pre>
 * 별도의 Limit이 걸려있지 않다면, ssh로 접속한 뒤에 학습(Training) 코드를 실행해도 튕기지 않음
+* 특정한 프로세스를 백그라운드로 전환하여 ssh 연결이 끊겨도 돌아가도록 하기 (소유 권한 포기)
+<pre>
+Ctrl + z
+bg
+disown -h
+</pre>
+* 하지만 클러스터 환경에서는 위 작업이 통하지 않을 수 있습니다. (disown을 해도, ssh 종료되면 프로세스 제거됨)
+* 전체 프로세스 정보 확인
+<pre>
+ps -ef
+</pre>
