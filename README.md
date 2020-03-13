@@ -29,6 +29,7 @@ sbatch multi_gpu_test.slurm.sh
 </pre>
 
 * 실행 중인 Job을 확인하고, 해당 노드로 들어가 그래픽 카드의 사용량을 확인합니다.
+* 자신이 실행 중인 Job이 해당 노드에서 돌아가고 있지 않은 경우, 해당 노드로의 접속이 안 될 수 있습니다.
 <pre>
 sinfo
 squeue
@@ -66,9 +67,13 @@ conda create -n tf-cpu-py37 python=3.7
 conda activate tf-cpu-py37
 </pre>
 
-* 필요한 라이브러리 설치하기
+* 필요한 라이브러리 설치하기 (특정 Conda Environment에 접속해 있어야 합니다.)
 <pre>
 pip install tensorflow-gpu --user
+pip install matplotlib --user
+pip install image --user
+pip install pillow --user
+pip install opencv-python --user
 </pre>
 
 * 클러스터에서 가상 환경 이용 및 필요한 모듈만 Load
@@ -78,3 +83,12 @@ conda activate tf-cpu-py37
 ml load cuda/10.0
 ml load cuDNN/cuda/10.0/7.6.4.38
 </pre>
+
+#### 실제 실험 과정
+
+* 가장 먼저 conda 가상환경을 구축하여, 필요한 라이브러리를 설치합니다.
+* 일단 클러스터(Cluster) 접속 이전에 해당 conda 가상환경으로 프로그램을 실행합니다.
+* 실행이 잘 되는 경우, srun 명령어로 /bin/bash를 이용하여 특정 클러스터 노드에서 프로그램을 실행합니다.
+  * srun -p gpu-titanxp -N 1 -n 1 -t 02:00:00 --gres=gpu:1 --pty /bin/bash -l
+* 최종적으로 slurm 파일을 작성한 뒤에 sbatch 명령어로 Job을 실행합니다.
+  * sbatch 파일.sh
