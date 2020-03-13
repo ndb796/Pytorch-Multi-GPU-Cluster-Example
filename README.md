@@ -74,6 +74,7 @@ pip install matplotlib --user
 pip install image --user
 pip install pillow --user
 pip install opencv-python --user
+pip install dlib --user
 </pre>
 
 * 클러스터에서 가상 환경 이용 및 필요한 모듈만 Load
