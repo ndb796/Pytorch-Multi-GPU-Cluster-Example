@@ -89,6 +89,6 @@ ml load cuDNN/cuda/10.0/7.6.4.38
 * 가장 먼저 conda 가상환경을 구축하여, 필요한 라이브러리를 설치합니다.
 * 일단 클러스터(Cluster) 접속 이전에 해당 conda 가상환경으로 프로그램을 실행합니다.
 * 실행이 잘 되는 경우, srun 명령어로 /bin/bash를 이용하여 특정 클러스터 노드에서 프로그램을 실행합니다.
-  * srun -p gpu-titanxp -N 1 -n 1 -t 02:00:00 --gres=gpu:1 --pty /bin/bash -l
+  * srun -p gpu-titanxp -N 1 -n 1 -t 264:00:00 --gres=gpu:1 --pty /bin/bash -l
 * 최종적으로 slurm 파일을 작성한 뒤에 sbatch 명령어로 Job을 실행합니다.
   * sbatch 파일.sh
