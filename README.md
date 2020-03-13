@@ -93,3 +93,77 @@ ml load cuDNN/cuda/10.0/7.6.4.38
   * srun -p gpu-titanxp -N 1 -n 1 -t 264:00:00 --gres=gpu:1 --pty /bin/bash -l
 * 최종적으로 slurm 파일을 작성한 뒤에 sbatch 명령어로 Job을 실행합니다.
   * sbatch 파일.sh
+
+#### libopenblas 설치 문제
+
+* 파이썬(Python)의 dlib 라이브러리를 사용할 때 다음과 같은 오류가 발생할 수 있습니다.
+<pre>
+Traceback (most recent call last):
+  File "make_adversarial_video.py", line 222, in <module>
+    import dlib
+ImportError: libopenblas.so.0: cannot open shared object file: No such file or directory
+</pre>
+
+* 클러스터 일반 사용자의 경우 sudo 권한이 없어 설치가 불가능합니다.
+* 따라서 다음과 같이 소스코드를 직접 받아서 컴파일하여 사용할 수 있습니다.
+
+<pre>
+git clone https://github.com/xianyi/OpenBLAS && cd OpenBLAS
+CC=gcc make -j$(nproc)
+</pre>
+
+* 이후에 특정 세션에서 env | grep LD_LIBRARY_PATH 명령으로 기존의 LD_LIBRARY_PATH 환경변수 확인한 뒤에 내용 복사
+* 기존의 환경변수 내용에 :를 붙인 뒤에 /home/dongbinna/additional_library/OpenBLAS 추가 (OpenBLAS 절대 경로)
+
+#### 특정 노드에서 무한 반복 스크립트만 실행하는 방법
+
+* 무한 반복 스크립트 (repeat.py)
+<pre>
+while True:
+    pass
+</pre>
+
+* Slurm Batch 파일 예제 (bash_batch.sh)
+<pre>
+#!/bin/sh
+
+#SBATCH -J batch_example
+#SBATCH -o batch_example.%j.out
+#SBATCH -p gpu-titanxp
+#SBATCH -t 264:00:00
+
+#SBATCH --gres=gpu:1
+#SBATCH --ntasks=1
+#SBATCH --tasks-per-node=1
+#SBATCH --cpus-per-task=1
+
+cd  $SLURM_SUBMIT_DIR
+
+echo "SLURM_SUBMIT_DIR=$SLURM_SUBMIT_DIR"
+echo "CUDA_HOME=$CUDA_HOME"
+echo "CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES"
+echo "CUDA_VERSION=$CUDA_VERSION"
+
+srun -l /bin/hostname
+srun -l /bin/pwd
+srun -l /bin/date
+
+python3 repeat.py
+
+date
+
+squeue  --job  $SLURM_JOBID
+
+echo  "##### END #####"
+</pre>
+
+* sbatch bash_batch.sh 명령으로 실행
+* 이제 해당 Job이 무한히 돌고 있을 때, ssh 명령으로 해당 노드에 접근하여 사용하는 것이 가능하긴 함
+
+#### 기타
+
+* 특정 노드에 ssh 명령으로 접속한 뒤에도, pip 명령으로 필요한 패키지를 설치해 바로 쓸 수 있음
+* 특정 노드에 Ssh 명령으로 접속하는 경우, GPU 자원이 자신의 것만으로 제한되지 않음
+  * 따라서 파이썬 프로그램이 다른 사용자의 GPU에 접근하는 경우 오류가 발생함
+  * 다음과 같이 특정한 GPU 자원만 이용하도록 코드상에서 제한하여 오류 해결 가능
+
