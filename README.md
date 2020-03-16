@@ -176,7 +176,7 @@ echo  "##### END #####"
 <pre>
 os.environ["CUDA_VISIBLE_DEVICES"]='0,1'
 </pre>
-* 별도의 Limit이 걸려있지 않다면, ssh로 접속한 뒤에 학습(Training) 코드를 실행해도 튕기지 않음
+* 별도의 Limit이 걸려있지 않다면, ssh로 접속한 뒤에 학습(Training) 코드를 실행해도 튕기지 않음 (심지어 권한 밖의 GPU를 이용해서도 학습이 가능함)
 * 특정한 프로세스를 백그라운드로 전환하여 ssh 연결이 끊겨도 돌아가도록 하기 (소유 권한 포기)
 <pre>
 Ctrl + z
